@@ -1,0 +1,12 @@
+disabled_rules: 
+  identifier_name
+
+opt_in_rules: 
+
+
+included:
+
+excluded:
+  - Pods
+
+line_length: 200
