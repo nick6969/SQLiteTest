@@ -28,6 +28,15 @@ final class MainVC: UIViewController {
         return button
     }()
 
+    // Operations
+    lazy var deleteClourse: (UITableViewRowAction, IndexPath) -> Void = { [weak self] _, index in
+        guard let `self` = self else { return }
+        let model = self.models[index.row]
+        DBM.delete(table: Todo.tableName, data: model)
+        self.models.remove(at: index.row)
+        self.tableView.reloadData()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -109,13 +118,7 @@ extension MainVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteAction: UITableViewRowAction = .init(style: .default, title: "刪除") { [weak self] _, index in
-            guard let `self` = self else { return }
-            let model = self.models[index.row]
-            DBM.delete(table: Todo.tableName, data: model)
-            self.models.remove(at: indexPath.row)
-            self.tableView.reloadData()
-        }
+        let deleteAction = UITableViewRowAction(style: .default, title: "刪除", handler: deleteClourse)
         return [deleteAction]
     }
 }
